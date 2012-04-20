@@ -16,7 +16,7 @@ void fire( Piece &laser , Board &board , int angle)
 		// pc = first non null entry
         x_dir = true;
 	}
-    else
+	else
 	{
 		// Iterate in y direction
 		// pc = first non null entry
@@ -24,15 +24,16 @@ void fire( Piece &laser , Board &board , int angle)
 	}	
 	if(x_dir == false && y_dir == false)
     {
-        // Out of bounds 
+		// Out of bounds 
         return;
-    }
+	}
+
     int face_angle = pc.get_angle();
     int new_angle = 0;
-
+	
 	switch (pc.type)
-    {
-        case Piece::DiaMirror:
+	{
+		case Piece::DiaMirror:
 	    {		
 			if(x_dir)
 			{
