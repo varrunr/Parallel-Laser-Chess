@@ -1,6 +1,6 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
-//#define coordinate std::vector< int >
+
 class Piece;
 
 class Board
@@ -20,6 +20,5 @@ class Board
 	    Hyper hyperhole;									/* Only 1 hyper hole for a board */
 
 };
-
 
 #endif

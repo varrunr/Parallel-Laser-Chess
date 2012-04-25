@@ -1,6 +1,6 @@
 #include<vector>
 #include<iostream>
-
+#include "constants.h"
 #include "piece.h"
 #include "board.h"
 #include "lchess.h"

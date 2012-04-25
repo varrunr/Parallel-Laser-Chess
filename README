@@ -1,3 +1,6 @@
 Laser chess: http://www.laserchess.org/
 Our objective is to design and implement a parallel laser chess
 program.
+
+Compile with 
+$  g++ -o lchess piece.cpp board.cpp lchess.cpp

@@ -1,3 +1,6 @@
+#include <iostream>
+#include <vector>
+#include "constants.h"
 #include "piece.h"
 
 int
@@ -11,3 +14,5 @@ Piece::get_loc()
 {
     return posn;
 }
+
+
