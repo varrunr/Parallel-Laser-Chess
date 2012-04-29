@@ -9,7 +9,8 @@ class Move
 		char dst_loc[2];
 		char type;
 		int angle;
-	
+		
+		bool is_valid_angle();
 	public:
 
 		bool is_valid_move();
@@ -17,5 +18,3 @@ class Move
 };
 
 #endif
-
-
