@@ -3,4 +3,4 @@ Our objective is to design and implement a parallel laser chess
 program.
 
 Compile with 
-$  g++ -o lchess piece.cpp board.cpp lchess.cpp
+$  g++ -o lchess piece.cpp board.cpp lchess.cpp move.cpp
