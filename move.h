@@ -12,6 +12,8 @@ class Move
 		
 		bool is_valid_angle();
 		bool is_valid_type();
+		bool is_valid_loc(char *);
+
 	public:
 
 		bool is_valid_move();

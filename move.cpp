@@ -1,4 +1,5 @@
 #include<iostream>
+#include<cstring>
 #include "move.h"
 
 bool Move::is_valid_move()
@@ -30,3 +31,18 @@ bool Move::is_valid_type()
 	}
 	return true;
 }
+
+bool is_valid_loc(char *loc)
+{
+	if( strlen(loc) == 2)
+	{
+		char x = loc[0];
+		char y = loc[1];
+
+		bool test = ( x >= 'A' && x <= 'H') &&
+					( y >= '1' && y <= '8');
+		if(test) return true;
+	}
+	return false;
+}
+		
