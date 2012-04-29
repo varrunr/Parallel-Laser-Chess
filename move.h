@@ -11,6 +11,7 @@ class Move
 		int angle;
 		
 		bool is_valid_angle();
+		bool is_valid_type();
 	public:
 
 		bool is_valid_move();
