@@ -1,19 +1,17 @@
 #include<iostream>
 #include<cstring>
+#include<cassert>
 #include "move.h"
 
-bool Move::is_valid_move()
-{
-	return true;
-}
-
-bool Move::is_valid_angle()
+bool 
+Move::is_valid_angle()
 {
 	if(angle == 90 || angle == -90) return true;
 	return false;
 }
 
-bool Move::is_valid_type()
+bool 
+Move::is_valid_type()
 {
 	switch(type)
 	{
@@ -32,7 +30,8 @@ bool Move::is_valid_type()
 	return true;
 }
 
-bool is_valid_loc(char *loc)
+bool 
+Move::is_valid_loc(char *loc)
 {
 	if( strlen(loc) == 2)
 	{
@@ -45,4 +44,25 @@ bool is_valid_loc(char *loc)
 	}
 	return false;
 }
-		
+
+bool 
+Move::is_valid()
+{
+	assert( this->is_valid_type() );
+	switch(type)
+	{
+		case 'M':
+			assert( this->is_valid_loc(src_loc) );
+			assert( this->is_valid_loc(dst_loc) );
+			/* TODO: Check if src_loc has a piece */
+			break;
+		case 'R':
+			assert( this->is_valid_angle() );
+			/* TODO: Check if dst_loc has a piece */
+			break;
+		case 'F':
+			/* TODO: Make sure piece at src_loc is a laser */
+			break;
+	}
+	return true;
+}

@@ -16,7 +16,7 @@ class Move
 
 	public:
 
-		bool is_valid_move();
+		bool is_valid();
 		bool set_move(char *);
 };
 
