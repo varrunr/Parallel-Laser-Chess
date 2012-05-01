@@ -16,7 +16,8 @@ class Piece
 			StrMirror,
 			DiaMirror,
 			TriMirror,
-			Hhole
+			Hhole,
+			Empty
 		} type;
 
 		void 	    add_move(int , int , int , int);
