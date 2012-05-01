@@ -27,11 +27,12 @@ class Piece
 	    coordinate  get_loc();
 		PieceType	get_type();
 		int 	    get_angle();
-	
+		Piece(int , int , TwoDarray , int);
+		Piece(){};
 	private:
         
 		int face_angle;
-		std::vector< std::vector<int> > valid_moves;
+		TwoDarray valid_moves;
         int color;
 		coordinate posn;
 };

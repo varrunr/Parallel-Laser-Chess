@@ -26,3 +26,11 @@ Piece::get_loc()
 {
     return this->posn;
 }
+
+Piece::Piece(int x , int y , TwoDarray val_mv , int clr)
+{
+	this->posn.push_back(x);
+	this->posn.push_back(y);	
+	this->color = clr;
+	this->valid_moves = val_mv;
+}
