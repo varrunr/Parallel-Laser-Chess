@@ -19,14 +19,15 @@ class Piece
 			Hhole
 		} type;
 
-		void 	    set_angle(int);
-		int 	    get_angle();
 		void 	    add_move(int , int , int , int);
+		void 	    set_angle(int);
 		void	    set_type(int);
 		void	    set_color(int);
 		int	        get_color();
 	    coordinate  get_loc();
-
+		PieceType	get_type();
+		int 	    get_angle();
+	
 	private:
         
 		int face_angle;
