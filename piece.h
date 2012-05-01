@@ -29,7 +29,7 @@ class Piece
 		PieceType	get_type();
 		int 	    get_angle();
 		Piece(int , int , TwoDarray , int);
-		Piece(){};
+		Piece();
 	private:
         
 		int face_angle;

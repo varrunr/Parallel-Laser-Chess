@@ -34,3 +34,8 @@ Piece::Piece(int x , int y , TwoDarray val_mv , int clr)
 	this->color = clr;
 	this->valid_moves = val_mv;
 }
+
+Piece::Piece()
+{
+	this->type = Piece::Empty;
+}
