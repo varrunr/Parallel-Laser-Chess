@@ -1,6 +1,10 @@
 #ifndef __CONSTANTS_H__
 #define __CONSTANTS_H__
 
+/* Size of the chess board */
+#define BRD_SZ 8
+
+/* Constants for evaluation */
 #define INFTY 10000
 #define KING INFTY
 #define LASER 9
