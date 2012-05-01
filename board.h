@@ -13,7 +13,7 @@ class Board
 	    int get_piece( coordinate );
 	    void destroy( Piece );
 	    void init();
-	    void print_board();
+	    void print();
 	
 	private:
 	    std::vector < std::vector< Piece > > chessboard;	/* 2D Array */			
