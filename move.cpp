@@ -1,7 +1,9 @@
 #include<iostream>
 #include<cstring>
 #include<cassert>
+#include<vector>
 #include "move.h"
+#include "constants.h"
 
 bool 
 Move::is_valid_angle()
@@ -31,17 +33,12 @@ Move::is_valid_type()
 }
 
 bool 
-Move::is_valid_loc(char *loc)
+Move::is_valid_loc(int *loc)
 {
-	if( strlen(loc) == 2)
-	{
-		char x = loc[0];
-		char y = loc[1];
+	if(	loc[0] < BRD_SZ && loc[1] < BRD_SZ &&
+		loc[0] >= 0 && loc[1] >=0)
+		return true;
 
-		bool test = ( x >= 'A' && x <= 'H') &&
-					( y >= '1' && y <= '8');
-		if(test) return true;
-	}
 	return false;
 }
 
@@ -66,3 +63,26 @@ Move::is_valid()
 	}
 	return true;
 }
+
+Move::Move()
+{
+	for(int i=0;i<2;i++)
+	{
+		src_loc[i] = 0;
+		dst_loc[i] = 0;
+	}
+	angle = 0;
+}
+
+Move::Move(	char mv_type , int angle , 
+			int src_x = 0 , int src_y = 0,
+			int dst_x = 0 , int dst_y = 0)
+{
+	this->type = mv_type;
+	this->angle = angle;
+	this->src_loc[0] = src_x;
+	this->src_loc[1] = src_y;
+	this->dst_loc[0] = dst_x;
+	this->dst_loc[1] = dst_y;
+}
+
