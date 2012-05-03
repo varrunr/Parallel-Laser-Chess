@@ -21,6 +21,12 @@ Piece::get_type()
 	return this->type;
 }
 
+void 
+Piece::set_type(int typ)
+{
+	this->type = (Piece::PieceType) type;
+}
+
 coordinate
 Piece::get_loc()
 {
