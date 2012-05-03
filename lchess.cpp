@@ -219,5 +219,8 @@ void fire( Piece &laser , Board &board , int angle)
 					
 int main(int argc, char *argv[])
 {
+	Board b;
+	b.init();
+	b.print();	
 	return 0;
 }

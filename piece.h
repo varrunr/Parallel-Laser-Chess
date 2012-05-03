@@ -8,7 +8,7 @@ class Piece
 	public:
 		enum PieceType
 		{
-			King,
+			King = 0,
 			Laser,
 			Hcube,
 			Bsplitter,
@@ -24,16 +24,23 @@ class Piece
 		void 	    set_angle(int);
 		void	    set_type(int);
 		void	    set_color(int);
+		void		set_valid_moves(int , int , int);
 		int	        get_color();
 	    coordinate  get_loc();
 		PieceType	get_type();
 		int 	    get_angle();
-		Piece(int , int , TwoDarray , int);
+
+		bool		canMove();
+		bool		canFire();
+		bool		canRotate();
+
+		Piece(int , int , std::vector<int> , int);
 		Piece();
+
 	private:
         
 		int face_angle;
-		TwoDarray valid_moves;
+		std::vector<int> valid_moves;
         int color;
 		coordinate posn;
 };
