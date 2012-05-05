@@ -5,6 +5,8 @@
 #include "move.h"
 #include "constants.h"
 
+using namespace mv;
+
 bool 
 Move::is_valid_angle()
 {
@@ -33,11 +35,11 @@ Move::is_valid_type()
 }
 
 bool 
-Move::is_valid_loc(int *loc)
+Move::is_valid_loc(int x , int y)
 {
-	if(	loc[0] < BRD_SZ && loc[1] < BRD_SZ &&
-		loc[0] >= 0 && loc[1] >=0)
-		return true;
+	if(	x < BRD_SZ && 
+		x < BRD_SZ &&
+		x >= 0 && y >=0) return true;
 
 	return false;
 }
@@ -49,12 +51,12 @@ Move::is_valid()
 	switch(type)
 	{
 		case 'M':
-			assert( this->is_valid_loc(src_loc) );
-			assert( this->is_valid_loc(dst_loc) );
+			//assert( this->is_valid_loc(src_loc) );
+			//assert( this->is_valid_loc(dst_loc) );
 			/* TODO: Check if src_loc has a piece */
 			break;
 		case 'R':
-			assert( this->is_valid_angle() );
+			//assert( this->is_valid_angle() );
 			/* TODO: Check if dst_loc has a piece */
 			break;
 		case 'F':
@@ -66,23 +68,20 @@ Move::is_valid()
 
 Move::Move()
 {
-	for(int i=0;i<2;i++)
-	{
-		src_loc[i] = 0;
-		dst_loc[i] = 0;
-	}
-	angle = 0;
+	this->src_x = 0;
+	this->src_y = 0;
+	this->angle = 0;
 }
 
 Move::Move(	char mv_type , int angle , 
-			int src_x = 0 , int src_y = 0,
-			int dst_x = 0 , int dst_y = 0)
+			int s_x = 0 , int s_y = 0,
+			int d_x = 0 , int d_y = 0)
 {
 	this->type = mv_type;
 	this->angle = angle;
-	this->src_loc[0] = src_x;
-	this->src_loc[1] = src_y;
-	this->dst_loc[0] = dst_x;
-	this->dst_loc[1] = dst_y;
+	this->src_x = s_x;
+	this->src_y = s_y;
+	this->dst_x = d_x;
+	this->dst_y = d_y;
 }
 
