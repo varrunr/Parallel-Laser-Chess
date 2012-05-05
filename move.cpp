@@ -35,7 +35,7 @@ Move::is_valid_type()
 }
 
 bool 
-Move::is_valid_loc(int x , int y)
+valid_loc(int x , int y)
 {
 	if(	x < BRD_SZ && 
 		x < BRD_SZ &&
@@ -45,19 +45,23 @@ Move::is_valid_loc(int x , int y)
 }
 
 bool 
+Move::loc_is_valid()
+{
+	return ( valid_loc(this->src_x , this->src_y) && 
+			 valid_loc(this->dst_x , this->dst_y) );
+}
+
+bool 
 Move::is_valid()
 {
 	assert( this->is_valid_type() );
 	switch(type)
 	{
 		case 'M':
-			//assert( this->is_valid_loc(src_loc) );
-			//assert( this->is_valid_loc(dst_loc) );
-			/* TODO: Check if src_loc has a piece */
+			assert( this->loc_is_valid() );
 			break;
 		case 'R':
-			//assert( this->is_valid_angle() );
-			/* TODO: Check if dst_loc has a piece */
+			assert( this->is_valid_angle() );
 			break;
 		case 'F':
 			/* TODO: Make sure piece at src_loc is a laser */

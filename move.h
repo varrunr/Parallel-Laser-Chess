@@ -14,7 +14,7 @@ namespace mv
 			
 			bool is_valid_angle();
 			bool is_valid_type();
-			bool is_valid_loc(int x, int y);
+			bool loc_is_valid();
 			
 			Move();
 			Move( char, int, int, int , int , int);
