@@ -8,7 +8,7 @@ class Board
 	public:
 	
 	    std::vector< coordinate > get_empty_cells();
-	    int move_piece( Piece, coordinate );
+	    int move_piece( int , int , int , int );
 	    int set_piece( Piece );	
 	    int get_piece( coordinate );
 	    void destroy( Piece );

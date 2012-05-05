@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <algorithm>
 #include "constants.h"
 #include "piece.h"
 #include "board.h"
@@ -11,6 +12,45 @@ Board::destroy(Piece pc)
 {
     coordinate posn = pc.get_loc();
     chessboard[posn[0]][posn[1]];
+}
+
+void swap_pc(Piece *pc1 , Piece *pc2)
+{
+	Piece *tmp = pc1;
+	pc1 = pc2;
+	pc2 = tmp;
+}
+
+int
+Board::move_piece(	int src_x , int src_y , 
+					int dst_x , int dst_y)
+{
+	Piece src_pc , dst_pc;
+	src_pc = this->chessboard[src_x][src_y]; 
+	dst_pc = this->chessboard[dst_x][dst_y];
+	
+	int src_clr = src_pc.get_color();
+	int dst_clr = dst_pc.get_color();
+
+	if(dst_pc.get_type() == Piece::Empty )
+	{
+		std::swap( 	this->chessboard[dst_x][dst_y] , 
+					this->chessboard[src_x][src_y] );	
+		this->chessboard[src_x][src_y] = Piece();
+		return 1;
+	}
+	else
+	{
+		if( src_clr == dst_clr) return -1;
+		if( src_clr != dst_clr)
+		{
+			std::swap( 	this->chessboard[src_x][src_y] , 
+						this->chessboard[dst_x][dst_y] );
+			this->destroy( dst_pc );
+			return 0; 
+		}
+	}
+	return -1;
 }
 
 std::string 
