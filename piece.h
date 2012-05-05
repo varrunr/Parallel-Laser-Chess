@@ -3,6 +3,11 @@
 
 class Board;
 
+namespace mv{
+
+	class Move;
+};
+
 class Piece
 {
 	public:
@@ -20,6 +25,7 @@ class Piece
 			Empty
 		} type;
 
+		/* Setters and getters */
 		void 	    add_move(int , int , int , int);
 		void 	    set_angle(int);
 		void	    set_type(int);
@@ -30,15 +36,21 @@ class Piece
 		PieceType	get_type();
 		int 	    get_angle();
 
+		/* Function prototypes */
 		bool		canMove();
 		bool		canFire();
 		bool		canRotate();
+		std::vector< mv::Move > get_moves(Board &);
 
+		/* Constructors */
 		Piece(int , int , std::vector<int> , int);
 		Piece();
+		
+		/* Copy constructor */
+		Piece& operator = (const Piece&);
 
 	private:
-        
+        /* Class members */
 		int face_angle;
 		std::vector<int> valid_moves;
         int color;

@@ -49,6 +49,15 @@ Piece::Piece()
 	this->type = Piece::Empty;
 }
 
+Piece&
+Piece::operator = (const Piece &src)
+{
+	this->face_angle = src.face_angle;
+	this->valid_moves = src.valid_moves;
+	this->color = src.color;
+	this->posn = src.posn;
+}
+
 void
 Piece::set_valid_moves(int move , int rotate , int fire)
 {
@@ -76,4 +85,14 @@ Piece::canFire()
 {
 	if( this->valid_moves[FIRE] ) return true;
 	return false;
+}
+
+std::vector< mv::Move >
+Piece::get_moves( Board &brd)
+{
+	//std::vector< Move > moves;
+
+	// TODO:
+
+	//return moves;
 }
