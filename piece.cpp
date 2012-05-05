@@ -18,6 +18,18 @@ Piece::set_angle( int angle )
 	this->face_angle = angle;
 }
 
+void
+Piece::set_color( int clr )
+{
+	this->color = clr;
+}
+
+int
+Piece::get_color()
+{
+	return this->color;
+}
+
 Piece::PieceType
 Piece::get_type()
 {
