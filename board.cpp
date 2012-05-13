@@ -130,10 +130,30 @@ wrap( Piece::PieceType pc)
 	return ptype;
 }
 
+std::string
+wrap_angle(int angle)
+{
+	switch(angle)
+	{
+		case 0:
+			return " 0 ";
+		case 90:
+			return " 90";
+		case 180:
+			return "180";
+		case 270:
+			return "270";
+		default:
+			return "   ";
+	}
+}
+	
+
 char get_chr(int i)
 {
 	return (char) (i + 65);
 }
+
 
 void print_line(char c , int n_line , char sep, bool end)
 {
@@ -147,8 +167,14 @@ void print_line(char c , int n_line , char sep, bool end)
 void
 Board::print()
 {
-	bool angle = false;	
-	print_line('-', 29 , '-', true);
+	bool angle = true;	
+	print_line('-', 46 , '-', true);
+	std::cout<<"    ";
+	for(int i = 0;i < this->chessboard.size();i++)
+	{
+		std::cout<<"    "<<i<<"     ";
+	}std::cout<<"\n";
+		
 	for(unsigned int i = 0 ; i < this->chessboard.size() ; i++)
 	{
 		std::cout<< get_chr(i)<<" | "; 
@@ -156,12 +182,12 @@ Board::print()
 		{
 			std::cout<< "|"<< wrap( this->chessboard[i][j].get_type() );
 			if(angle)
-				std::cout<< "," << this->chessboard[i][j].get_angle(); 
+				std::cout<< "," << wrap_angle(this->chessboard[i][j].get_angle()); 
 			std::cout<<"| ";
 		}
 		std::cout<<std::endl;
 	}
-	print_line('-', 29 , '-', true);
+	print_line('-', 49 , '-', true);
 }
 
 void

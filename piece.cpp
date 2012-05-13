@@ -102,6 +102,8 @@ Piece::Piece()
 	this->type = Piece::Empty;
 	this->posn.push_back(-1); // x coord
 	this->posn.push_back(-1); // y coord
+	this->color = 0;
+	this->face_angle = -1;
 }
 
 Piece&
