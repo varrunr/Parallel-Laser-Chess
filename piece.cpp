@@ -6,12 +6,37 @@
 #include "constants.h"
 #include "piece.h"
 
+void
+Piece::destroy()
+{
+	this->type = Piece::Empty;
+	this->posn[0] = (-1); // x coord
+	this->posn[1] = (-1); // y coord
+}
+	
+void
+Piece::destroy(Piece src)
+{
+	//dst_pc->type = (Piece::PieceType) src_pc.;
+	//dst_pc->color( src_pc->get_color() );
+	// TODO: set valid moves
+	//dst_pc->set_valid_moves( src_pc->get_valid_moves() );
+	//dst_pc->set_angle( src_pc->get_angle());
+
+
+}
+
 int
 Piece::get_angle()
 {
     return this->face_angle;
 }
 
+void 
+Piece::set_valid_moves(std::vector<int> val_mv)
+{
+	this->valid_moves = val_mv;
+}
 void 
 Piece::set_angle( int angle )
 {
@@ -36,6 +61,13 @@ Piece::get_type()
 	return this->type;
 }
 
+
+std::vector<int>
+Piece::get_valid_moves()
+{
+	return this->valid_moves;
+}
+
 void 
 Piece::set_type(int ptype)
 {
@@ -46,6 +78,15 @@ coordinate
 Piece::get_loc()
 {
     return this->posn;
+}
+
+void
+Piece::set_loc(int x, int y)
+{
+	if(posn.size() == 2){
+		posn[0] = x;
+		posn[1] = y;
+	}
 }
 
 Piece::Piece(int x , int y , std::vector<int> val_mv , int clr)
@@ -59,6 +100,8 @@ Piece::Piece(int x , int y , std::vector<int> val_mv , int clr)
 Piece::Piece()
 {
 	this->type = Piece::Empty;
+	this->posn.push_back(-1); // x coord
+	this->posn.push_back(-1); // y coord
 }
 
 Piece&
@@ -68,6 +111,7 @@ Piece::operator = (const Piece &src)
 	this->valid_moves = src.valid_moves;
 	this->color = src.color;
 	this->posn = src.posn;
+	return *this;
 }
 
 void

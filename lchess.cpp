@@ -3,224 +3,69 @@
 #include "constants.h"
 #include "piece.h"
 #include "board.h"
+#include "move.h"
 #include "lchess.h"
-//std::vector< coordinate > get_next_move ( Board & , Piece& );
 
-void fire( Piece &laser , Board &board , int angle)
+std::vector< mv::Move > 
+get_next_moves( Board & brd , Piece& pc , int player = 0)
 {
-	bool x_dir , y_dir; 
-	Piece pc;
-	if( angle == 90 || angle == 270 )
-	{
-		// Iterate in x direction
-		// pc = first non null entry
-        x_dir = true;
-	}
-	else
-	{
-		// Iterate in y direction
-		// pc = first non null entry
-		y_dir = true;
-	}	
-	if(x_dir == false && y_dir == false)
-    {
-		// Out of bounds 
-        return;
-	}
-
-    int face_angle = pc.get_angle();
-    int new_angle = 0;
+	std::vector< mv::Move > moves;
 	
-	switch (pc.type)
-	{
-		case Piece::DiaMirror:
-	    {		
-			if(x_dir)
-			{
-				if(face_angle  == 0 || face_angle == 180)
-				{
-					if(angle == 270) new_angle = 0;      // +y 
-					if(angle == 90)  new_angle = 180;    // -y
-				}
-				if(face_angle == 90 || face_angle == 270)
-				{
-					if(angle == 270) new_angle = 180;   // -y
-					if(angle == 90)  new_angle = 0 ;    // +y
-				}
-			}
-			if(y_dir)
-			{
-				if(face_angle == 0 || face_angle == 180)
-				{
-					if(angle == 0)   new_angle = 90 ;   // -x
-					if(angle == 180) new_angle = 270;   // +x
-				}
-				if(face_angle == 90 || face_angle == 270)
-				{
-					if(angle == 0)   new_angle = 270;   // +x
-					if(angle == 180) new_angle = 90;    //  -x
-				}
-			}
-			fire(pc , board, new_angle);
-			break;
-    	}
-        case Piece::StrMirror:
-        {
-			if( angle == 90 || angle == 270)
-		    {
-			    new_angle = 360 - face_angle;
-		    }
-		    else 
-            {
-                new_angle = 180 - face_angle;
-		    }
-		    fire( pc, board, new_angle);
-	        break;
-        }
-        case Piece::TriMirror:
-        {
-			if(x_dir)
-			{
-				if(face_angle == 0)
-				{
-					if(angle == 270) new_angle = 0; // +y 
-					if(angle == 90) 
-                    {
-                        board.destroy(pc);
-                        return;
-                    }
-				}
-
-				if(face_angle == 180 )
-				{
-					if(angle == 270) 
-                    {
-                        board.destroy(pc);
-                        return;
-                    }
-					if(angle == 90) new_angle = 180; // -y
-				}
-
-				if( face_angle == 90)
-				{
-					if(angle == 270) new_angle = 180;
-					if(angle == 90 ) 
-                    {
-                        board.destroy(pc);
-                        return;
-                    }
-                }
-				
-				if(face_angle == 270)
-				{
-					if(angle == 270)
-                    {
-                        board.destroy(pc);
-                        return;
-                    }
-					if(angle == 90) new_angle = 0;
-				}
-				fire(pc , board , new_angle);
-
-			}
-
-			if(y_dir)
-			{
-				if(face_angle == 0)
-				{
-					if(angle == 0) new_angle = 90; // -x 
-					if(angle == 180)
-                    {
-                        board.destroy(pc);
-                        return;
-                    }
-				}
-
-				if(face_angle == 180 )
-				{
-					if(angle == 0)
-                    {
-                        board.destroy(pc);
-                        return;
-                    }
-					if(angle == 180) new_angle = 270; // +x
-				}
-
-				if(face_angle == 90)
-				{
-					if(angle == 180) new_angle = 90;
-					if(angle == 0 )
-                    {
-                        board.destroy(pc);
-                        return;
-                    }
-				}
-
-				if(face_angle == 270)
-				{
-					if(angle == 180)
-                    {
-                        board.destroy(pc);
-                        return;
-                    }
-					if(angle == 0) new_angle = 270;
-				}
-				fire(pc , board , new_angle);
-			}
-            break;
-		}
-        case Piece::Block:
-		{
-			if( (angle - face_angle) == 180) 
-                new_angle = face_angle;
-			else
-            {
-                board.destroy(pc);
-                return;
-            }
-			fire(pc , board , new_angle);
-            break;
-		}
-        case Piece::King:
-		{
-			board.destroy(pc);
-            return;
-		}
-        case Piece::Hcube:
-		{
-			break;
-		}
-        case Piece::Hhole:
-        {
-            break;
-        }
-        case Piece::Bsplitter:
-		{
-			if(face_angle == angle) 
-            {
-                board.destroy(pc);
-            }
-			if(face_angle == 0 || face_angle == 180)
-			{
-				new_angle = face_angle;
-				fire(pc , board , new_angle);
-			}
-			else
-			{
-				int new_angle1 = (angle - 90) % 360;
-				int new_angle2 = (angle + 90) % 360;
-				fire(pc , board , new_angle1);
-				fire(pc , board , new_angle2);
-			}
-            break;
-		}
-	}
+	/* 
+	   For every piece of player on board
+			if color == player
+	   			pc_moves = Piece.get_moves(brd);
+				for i in pc_moves
+					moves.push_back(pc_moves[i]);
+		TODO: 1. Define Piece::get_moves(Board&);
+			  2. Define Player class
+	*/
+	
+	return moves;
 }
-					
+
+
+
+
+mv::Move 
+input_move()
+{
+	int s1 = 0, s2 =0 ;
+	int d1 = 0, d2 =0 ;
+	char type; 
+	int angle = 0;
+
+	std::cin>>type;
+	switch(type)
+	{
+		case 'M':
+			std::cin>>s1>>s2>>d1>>d2;
+			break;
+		case 'R':
+			std::cin>>angle>>s1>>s2;
+			break;
+		case 'F':
+			break;
+	}
+	return mv::Move(type , angle , s1 , s2 , d1 , d2);
+}
+
 int main(int argc, char *argv[])
 {
 	Board b;
 	b.init();
-	b.print();	
+	b.print();
+	while(1)
+	{
+		mv::Move mv1 = input_move();
+		if(mv1.is_valid())
+		{
+			std::cout<<"Move is valid\n";
+			b.make_move(mv1);
+			b.print();
+		}
+		else
+			std::cout<<"Move is invalid\n";
+	}
 	return 0;
 }

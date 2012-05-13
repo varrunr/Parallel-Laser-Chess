@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "constants.h"
 #include "piece.h"
+#include "move.h"
 #include "board.h"
 
 void
@@ -22,33 +23,66 @@ void swap_pc(Piece *pc1 , Piece *pc2)
 }
 
 int
-Board::move_piece(	int src_x , int src_y , 
-					int dst_x , int dst_y)
+Board::make_move(mv::Move m)
 {
-	Piece src_pc , dst_pc;
-	src_pc = this->chessboard[src_x][src_y]; 
-	dst_pc = this->chessboard[dst_x][dst_y];
+	Piece *src_pc , *dst_pc;
+	int src_clr , dst_clr;
 	
-	int src_clr = src_pc.get_color();
-	int dst_clr = dst_pc.get_color();
-
-	if(dst_pc.get_type() == Piece::Empty )
+	switch(m.type)
 	{
-		std::swap( 	this->chessboard[dst_x][dst_y] , 
-					this->chessboard[src_x][src_y] );	
-		this->chessboard[src_x][src_y] = Piece();
-		return 1;
-	}
-	else
-	{
-		if( src_clr == dst_clr) return -1;
-		if( src_clr != dst_clr)
+		case 'M':
 		{
-			std::swap( 	this->chessboard[src_x][src_y] , 
-						this->chessboard[dst_x][dst_y] );
-			this->destroy( dst_pc );
-			return 0; 
+			src_pc = &(this->chessboard[m.src_x][m.src_y]); 
+			dst_pc = &(this->chessboard[m.dst_x][m.dst_y]);
+	
+			src_clr = src_pc->get_color();
+			dst_clr = dst_pc->get_color();
+
+			if(src_clr != dst_clr)
+			{
+				if(dst_pc->get_type() == Piece::Empty)
+				{
+					std::cout<<" Moving from "<<m.src_x<<","<<m.src_y<<
+							   " to an empty place at "<<m.dst_x<<","<<m.dst_y<<"\n";
+				}	
+				dst_pc->set_type( src_pc->get_type() );
+				dst_pc->set_color( src_pc->get_color() );
+				dst_pc->set_valid_moves( src_pc->get_valid_moves() );
+				dst_pc->set_angle( src_pc->get_angle());
+				src_pc->destroy();
+				return 1;
+			}
+			else
+			{
+				if( src_clr == dst_clr) {
+					std::cout<<"Cannot make move\n";
+				}
+				return -1;
+			}
+			break;
+		}	
+		case 'R':
+		{
+			src_pc = &(this->chessboard[m.src_x][m.src_y]);
+			int new_angle = src_pc->get_angle();
+			if(new_angle == 0 && m.angle == -90)
+			{
+				new_angle = 270;
+			}
+			else
+			{
+				new_angle = ( new_angle + m.angle ) % 360;
+			}
+			src_pc->set_angle(new_angle);	
+			break;
 		}
+		case 'F':
+		{
+			fire( *src_pc , *this , m.angle);
+			return 1;
+			break;
+		}
+		default: return -1;
 	}
 	return -1;
 }
@@ -162,7 +196,11 @@ Board::init()
 				{				
 					cur_pc->set_type(ptype);
 					cur_pc->set_angle(angle);
-					
+					cur_pc->set_loc(i,j);
+					// Tentative
+					if( i == 0 || i == 1) cur_pc->set_color(PLAYER1);
+					if( i == BRD_SZ -2 || i == BRD_SZ - 1) cur_pc->set_color(PLAYER2);
+
 					switch(ptype)
 					{
 						case Piece::King:
@@ -202,4 +240,216 @@ Board::init()
 		}
 	}
 	f_brd.close();
+}
+
+void 
+fire( Piece &laser , Board &board , int angle)
+{
+	bool x_dir , y_dir; 
+	Piece pc;
+	if( angle == 90 || angle == 270 )
+	{
+		// Iterate in x direction
+		// pc = first non null entry
+        x_dir = true;
+	}
+	else
+	{
+		// Iterate in y direction
+		// pc = first non null entry
+		y_dir = true;
+	}	
+	if(x_dir == false && y_dir == false)
+    {
+		// Out of bounds 
+        return;
+	}
+
+    int face_angle = pc.get_angle();
+    int new_angle = 0;
+	
+	switch (pc.type)
+	{
+		case Piece::DiaMirror:
+	    {		
+			if(x_dir)
+			{
+				if(face_angle  == 0 || face_angle == 180)
+				{
+					if(angle == 270) new_angle = 0;      // +y 
+					if(angle == 90)  new_angle = 180;    // -y
+				}
+				if(face_angle == 90 || face_angle == 270)
+				{
+					if(angle == 270) new_angle = 180;   // -y
+					if(angle == 90)  new_angle = 0 ;    // +y
+				}
+			}
+			if(y_dir)
+			{
+				if(face_angle == 0 || face_angle == 180)
+				{
+					if(angle == 0)   new_angle = 90 ;   // -x
+					if(angle == 180) new_angle = 270;   // +x
+				}
+				if(face_angle == 90 || face_angle == 270)
+				{
+					if(angle == 0)   new_angle = 270;   // +x
+					if(angle == 180) new_angle = 90;    //  -x
+				}
+			}
+			fire(pc , board, new_angle);
+			break;
+    	}
+        case Piece::StrMirror:
+        {
+			if( angle == 90 || angle == 270)
+		    {
+			    new_angle = 360 - face_angle;
+		    }
+		    else 
+            {
+                new_angle = 180 - face_angle;
+		    }
+		    fire( pc, board, new_angle);
+	        break;
+        }
+        case Piece::TriMirror:
+        {
+			if(x_dir)
+			{
+				if(face_angle == 0)
+				{
+					if(angle == 270) new_angle = 0; // +y 
+					if(angle == 90) 
+                    {
+                        board.destroy(pc);
+                        return;
+                    }
+				}
+
+				if(face_angle == 180 )
+				{
+					if(angle == 270) 
+                    {
+                        board.destroy(pc);
+                        return;
+                    }
+					if(angle == 90) new_angle = 180; // -y
+				}
+
+				if( face_angle == 90)
+				{
+					if(angle == 270) new_angle = 180;
+					if(angle == 90 ) 
+                    {
+                        board.destroy(pc);
+                        return;
+                    }
+                }
+				
+				if(face_angle == 270)
+				{
+					if(angle == 270)
+                    {
+                        board.destroy(pc);
+                        return;
+                    }
+					if(angle == 90) new_angle = 0;
+				}
+				fire(pc , board , new_angle);
+
+			}
+
+			if(y_dir)
+			{
+				if(face_angle == 0)
+				{
+					if(angle == 0) new_angle = 90; // -x 
+					if(angle == 180)
+                    {
+                        board.destroy(pc);
+                        return;
+                    }
+				}
+
+				if(face_angle == 180 )
+				{
+					if(angle == 0)
+                    {
+                        board.destroy(pc);
+                        return;
+                    }
+					if(angle == 180) new_angle = 270; // +x
+				}
+
+				if(face_angle == 90)
+				{
+					if(angle == 180) new_angle = 90;
+					if(angle == 0 )
+                    {
+                        board.destroy(pc);
+                        return;
+                    }
+				}
+
+				if(face_angle == 270)
+				{
+					if(angle == 180)
+                    {
+                        board.destroy(pc);
+                        return;
+                    }
+					if(angle == 0) new_angle = 270;
+				}
+				fire(pc , board , new_angle);
+			}
+            break;
+		}
+        case Piece::Block:
+		{
+			if( (angle - face_angle) == 180) 
+                new_angle = face_angle;
+			else
+            {
+                board.destroy(pc);
+                return;
+            }
+			fire(pc , board , new_angle);
+            break;
+		}
+        case Piece::King:
+		{
+			board.destroy(pc);
+            return;
+		}
+        case Piece::Hcube:
+		{
+			break;
+		}
+        case Piece::Hhole:
+        {
+            break;
+        }
+        case Piece::Bsplitter:
+		{
+			if(face_angle == angle) 
+            {
+                board.destroy(pc);
+            }
+			if(face_angle == 0 || face_angle == 180)
+			{
+				new_angle = face_angle;
+				fire(pc , board , new_angle);
+			}
+			else
+			{
+				int new_angle1 = (angle - 90) % 360;
+				int new_angle2 = (angle + 90) % 360;
+				fire(pc , board , new_angle1);
+				fire(pc , board , new_angle2);
+			}
+            break;
+		}
+	}
 }

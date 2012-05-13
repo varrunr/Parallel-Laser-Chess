@@ -26,11 +26,16 @@ class Piece
 		} type;
 
 		/* Setters and getters */
-		void 	    add_move(int , int , int , int);
+
+		
 		void 	    set_angle(int);
 		void	    set_type(int);
 		void	    set_color(int);
 		void		set_valid_moves(int , int , int);
+		void 		set_valid_moves(std::vector<int>);
+		void		set_loc(int,int);
+
+		std::vector<int> get_valid_moves();
 		int	        get_color();
 	    coordinate  get_loc();
 		PieceType	get_type();
@@ -40,7 +45,10 @@ class Piece
 		bool		canMove();
 		bool		canFire();
 		bool		canRotate();
+		void		destroy(Piece);
+		void		destroy();
 		std::vector< mv::Move > get_moves(Board &);
+		void 	    add_move(int , int , int , int);
 
 		/* Constructors */
 		Piece(int , int , std::vector<int> , int);

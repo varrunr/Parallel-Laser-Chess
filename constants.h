@@ -12,6 +12,8 @@
 #define TRMIRR 3.5
 #define BMSPLTR 5
 
+#define PLAYER1 1
+#define PLAYER2 2
 typedef std::vector<int> coordinate;
 typedef std::vector< std::vector<int> > TwoDarray;
 #endif
