@@ -7,25 +7,55 @@
 #include "lchess.h"
 
 std::vector< mv::Move > 
-get_next_moves( Board & brd , Piece& pc , int player = 0)
+get_next_moves( Board & brd , Piece& pc , int player)
 {
+	std::vector< Piece* > player_pcs = brd.get_pieces(player);
+	Piece *cur_pc;
 	std::vector< mv::Move > moves;
-	
-	/* 
-	   For every piece of player on board
-			if color == player
-	   			pc_moves = Piece.get_moves(brd);
-				for i in pc_moves
-					moves.push_back(pc_moves[i]);
-		TODO: 1. Define Piece::get_moves(Board&);
-			  2. Define Player class
-	*/
-	
+	for(int i = 0; i < player_pcs.size(); i++)
+	{
+		cur_pc = player_pcs[i];
+		int x = cur_pc->getX();
+		int y = cur_pc->getY();
+
+		if(cur_pc->canMove())
+		{
+			mv::Move m1('M', 0 , x, y, x + 1 , y);
+			if(m1.is_valid())
+				moves.push_back(m1);
+			
+			mv::Move m2('M', 0 , x, y, x -1 , y);
+			if(m2.is_valid())
+				moves.push_back(m2);
+			
+			mv::Move m3('M', 0 , x, y, x , y + 1);
+			if(m3.is_valid())
+				moves.push_back(m3);
+			
+			mv::Move m4('M', 0 , x, y, x, y - 1);
+			if(m4.is_valid())
+				moves.push_back(m4);
+		}
+		if(cur_pc->canRotate())
+		{
+			mv::Move m5('R', 90 , x , y , 0 , 0);
+			if(m5.is_valid())
+				moves.push_back(m5);
+
+			mv::Move m6('R', -90 , x , y , 0 , 0);
+			if(m6.is_valid())
+				moves.push_back(m6);
+		}
+		if(cur_pc->canFire())
+		{
+			mv::Move m7('F', 0 , x , y , 0 , 0 );
+			if(m7.is_valid())
+				moves.push_back(m7);
+		}
+	}
 	return moves;
+	
 }
-
-
-
 
 mv::Move 
 input_move()

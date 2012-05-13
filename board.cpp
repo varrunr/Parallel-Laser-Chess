@@ -15,6 +15,28 @@ Board::destroy(Piece pc)
     chessboard[posn[0]][posn[1]];
 }
 
+std::vector< Piece* >
+Board::get_pieces(int player)
+{
+	Piece *cur_pc;
+	std::vector< Piece* > pc_list;
+	for(int i = 0;i<this->chessboard.size();i++)
+	{
+		for(int j = 0;j<this->chessboard[i].size();j++)
+		{
+			cur_pc = &(this->chessboard[i][j]);
+			if(cur_pc->get_color() == player)
+			{
+				pc_list.push_back(cur_pc);
+			}
+		}
+	}
+	return pc_list;
+}
+				
+			
+
+
 void swap_pc(Piece *pc1 , Piece *pc2)
 {
 	Piece *tmp = pc1;

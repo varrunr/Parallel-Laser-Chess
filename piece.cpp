@@ -13,7 +13,19 @@ Piece::destroy()
 	this->posn[0] = (-1); // x coord
 	this->posn[1] = (-1); // y coord
 }
-	
+
+int 
+Piece::getX()
+{
+	return this->posn[0];
+}
+
+int
+Piece::getY()
+{
+	return this->posn[1];
+}
+
 void
 Piece::destroy(Piece src)
 {

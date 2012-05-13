@@ -40,7 +40,8 @@ class Piece
 	    coordinate  get_loc();
 		PieceType	get_type();
 		int 	    get_angle();
-
+		int			getX();
+		int 		getY();
 		/* Function prototypes */
 		bool		canMove();
 		bool		canFire();
