@@ -15,6 +15,14 @@ Board::destroy(Piece pc)
     chessboard[posn[0]][posn[1]];
 }
 
+bool 
+Board::locIsEmpty(int x, int y)
+{
+	if((&this->chessboard[x][y])->get_type() == Piece::Empty)
+		return true;
+	return false;
+}
+
 std::vector< Piece* >
 Board::get_pieces(int player)
 {

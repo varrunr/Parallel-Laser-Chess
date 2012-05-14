@@ -15,6 +15,7 @@ class Board
 	    void init();
 	    void print();
 		std::vector< Piece* > get_pieces(int player);	
+		bool locIsEmpty(int ,int);
 	private:
 	    std::vector < std::vector< Piece > > chessboard;	/* 2D Array */			
 	    Hyper hyperhole;									/* Only 1 hyper hole for a board */
