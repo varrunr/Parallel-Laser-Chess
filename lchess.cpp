@@ -9,9 +9,12 @@
 std::vector< mv::Move > 
 get_next_moves( Board & brd, int player)
 {
+	/* get pieces belonging to player */
 	std::vector< Piece* > player_pcs = brd.get_pieces(player);
+	
 	Piece *cur_pc;
 	std::vector< mv::Move > moves;
+	
 	for(int i = 0; i < player_pcs.size(); i++)
 	{
 		cur_pc = player_pcs[i];
@@ -82,9 +85,9 @@ input_move()
 
 void printMove(mv::Move m1)
 {
-	std::cout << m1.type << "," << m1.angle << "," \
-			  << m1.src_x << "," << m1.src_y << "," \
-			  << m1.dst_x << "," << m1.dst_y << std::endl;
+	std::cout << m1.type << " " << m1.angle << " " \
+			  << m1.src_x << " " << m1.src_y << " " \
+			  << m1.dst_x << " " << m1.dst_y << std::endl;
 }
 
 /*int
@@ -151,75 +154,73 @@ Game_Tree_Search(Board &brd1, int depth, int origDepth, int player, int masterPl
 }
 */
 
-int n_ply_lookahead(Board brd, int player, int depth, std::vector<mv::Move> &v)
+int n_ply_lookahead(Board brd, int player, int depth, int origDepth , std::vector<mv::Move> &best_mv)
 {
-	int r, k=0, movescore1, movescore2;
+	int r=0, k=0, move1score=0, move2score=0 , totalscore = 0;
+	//std::cout<<"...\n";
+	int bestScore = -10000;
 	if(depth == 0)
 	{
 		return 0;
 	}
 	else
 	{
-		int bestScore = -10000;
-		std::vector< mv::Move > all_moves2;
-		std::vector< mv::Move > all_moves = get_next_moves(brd, player);
-		std::cout << "All moves 1: " << all_moves.size() << std::endl;
-		for(int i = 0; i < all_moves.size(); i++)
+		std::vector< mv::Move > all_moves1 = get_next_moves(brd, player);
+		//std::cout << "All moves 1: " << all_moves.size() << std::endl;
+		for(int i = 0; i < all_moves1.size(); i++)
 		{
 			Board copyBoard = brd;
-			if( (r = copyBoard.make_move(all_moves[i]) ) == -1 )
+			if( (r = copyBoard.make_move(all_moves1[i]) ) == -1 )
 			{
 				continue;
 			}
 			else
 			{
-				movescore1 = r;
+				move1score = r;
 			}
-			all_moves2 = get_next_moves(copyBoard, player);
-			std::cout << "All moves 2: " << all_moves2.size() << std::endl;
+
+			std::vector< mv::Move > all_moves2 = get_next_moves(copyBoard, player);
+			//std::cout << "All moves 2: " << all_moves2.size() << std::endl;
 			for(int j = 0; j < all_moves2.size(); j++)
 			{
 				Board copyBoard2 = copyBoard;
-				movescore2 = 0;
-				movescore2 += movescore1;
-				int newPlayer = (player == PLAYER2) ? PLAYER1 : PLAYER2;
-				int score = movescore2 - n_ply_lookahead(copyBoard2, newPlayer, depth-1, v);
-				
+				move2score = 0;
+				r = 0;
 				if( (r = copyBoard2.make_move(all_moves2[j]) ) == -1 )
 				{
 					continue;
 				}
 				else
 				{
-					movescore2 = r;
+					move2score = r;
 				}
-
+				totalscore = move1score + move2score;
+				int newPlayer = (player == PLAYER2) ? PLAYER1 : PLAYER2;
+				int score = totalscore - n_ply_lookahead(copyBoard2, newPlayer, depth-1, origDepth, best_mv);
+				
 				if(score > bestScore)
 				{
-					k = 1;
+					//std::cout<<"score:"<<score<<" level"<<depth<<std::endl;
 					bestScore = score;
-					v.clear();
-					v.push_back(all_moves[i]);
-					v.push_back(all_moves2[j]);
+					if(depth == origDepth){
+					best_mv.clear();
+					best_mv.push_back(all_moves1[i]);
+					best_mv.push_back(all_moves2[j]);
+					}
 				}
 			}
-	/*		if(k == 0)
-			{
-				v.clear();
-				v.push_back(all_moves[0]);
-				v.push_back(all_moves2[0]);	
-			}
-	*/	}
+		}
 		return bestScore;
-	}
+	}	
 }
 
 int main(int argc, char *argv[])
 {
 	Board b;
-	int moveCount = 0, tmp;
+	int moveCount = 0, tmp , test;
 	b.init();
 	b.print();
+
 	while(1)
 	{
 		if(moveCount != 1)
@@ -230,6 +231,9 @@ int main(int argc, char *argv[])
 				std::cout<<"Move is valid\n";
 				tmp = b.make_move(mv1);
 				b.print();
+				std::cout<<"Computers Turn now(ok?)\n";
+				std::cin>>test;
+
 				if(tmp != -1)
 					moveCount++;
 			}
@@ -240,19 +244,22 @@ int main(int argc, char *argv[])
 		{
 			moveCount = 0;
 			std::vector<mv::Move> v;
-			n_ply_lookahead(b, PLAYER2, 1, v);
-			if(v.size()>0){
-			printMove(v[0]);
-			b.make_move(v[0]);
+			int lookahead = 2;
+			n_ply_lookahead(b, PLAYER2, lookahead, lookahead, v);
+			//std::cout<<"Lookahead done "<<v.size()<<"\n";
+			//b.print();
+			
+			if( v.size() == 2)
+			{
+				printMove(v[0]);
+				b.make_move(v[0]);
+				b.print();
+		
+				printMove(v[1]);
+				b.make_move(v[1]);
+				b.print();
 			}
-			else{
-				std::cout<<"PROBLEM!!!\n";
-			}
-			if(v.size()>1){
-			printMove(v[1]);
-			b.make_move(v[1]);
-			}else std::cout<<"PROBLEM!!!\n";
-			b.print();
+			else std::cout<<"PROBLEM!!!\n";
 		}
 	}
 	return 0;

@@ -15,6 +15,17 @@ Move::is_valid_angle()
 	return false;
 }
 
+Move& 
+Move::operator = (const Move &src)
+{
+	this->src_x = src.src_x;
+	this->dst_x = src.dst_x;
+	this->src_y = src.src_y;
+	this->dst_y = src.dst_y;
+	this->type = src.type;
+	this->angle = src.angle;	
+	return *this;
+}
 bool 
 Move::is_valid_type()
 {

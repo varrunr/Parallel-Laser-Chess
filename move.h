@@ -18,7 +18,8 @@ namespace mv
 			
 			Move();
 			Move( char, int, int, int , int , int);
-		
+			
+			Move& operator = (const Move&);		
 			bool is_valid();
 			bool set_move(int *);
 	};
