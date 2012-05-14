@@ -8,6 +8,13 @@
 #include "move.h"
 #include "board.h"
 
+Board&
+Board::operator = (const Board &src)
+{
+	this->chessboard = src.chessboard;
+	return *this;
+}
+
 void
 Board::destroy(Piece pc)
 {
@@ -97,7 +104,7 @@ Board::make_move(mv::Move m)
 				int value = 0;
 				if(dst_pc->get_type() == Piece::Empty)
 				{
-					std::cout<<" Moving from "<<m.src_x<<","<<m.src_y<<
+//					std::cout<<" Moving from "<<m.src_x<<","<<m.src_y<< \
 							   " to an empty place at "<<m.dst_x<<","<<m.dst_y<<"\n";
 					value = 0;
 				}
@@ -114,7 +121,7 @@ Board::make_move(mv::Move m)
 			else
 			{
 				if( src_clr == dst_clr) {
-					std::cout<<"Cannot make move\n";
+//					std::cout<<"Cannot make move\n";
 				}
 				return -1;
 			}
