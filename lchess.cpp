@@ -173,11 +173,13 @@ int n_ply_lookahead(Board brd, int player, int depth, std::vector<mv::Move> &v)
 				movescore2 += movescore1;
 				int newPlayer = (player == PLAYER2) ? PLAYER1 : PLAYER2;
 				int score = movescore2 - n_ply_lookahead(copyBoard2, newPlayer, depth-1, v);
+				
 				if(score > bestScore)
 				{
 					bestScore = score;
-					v[0] = all_moves[i];
-					v[1] = all_moves2[j];
+					v.clear();
+					v.push_back(all_moves[i]);
+					v.push_back(all_moves2[j]);
 				}
 			}
 		}
@@ -210,12 +212,19 @@ int main(int argc, char *argv[])
 		else
 		{
 			moveCount = 0;
-			std::vector<mv::Move> v(2);
+			std::vector<mv::Move> v;
 			n_ply_lookahead(b, PLAYER2, 1, v);
+			if(v.size()>0){
 			printMove(v[0]);
 			b.make_move(v[0]);
+			}
+			else{
+				std::cout<<"PROBLEM!!!\n";
+			}
+			if(v.size()>1){
 			printMove(v[1]);
 			b.make_move(v[1]);
+			}else std::cout<<"PROBLEM!!!\n";
 			b.print();
 		}
 	}
