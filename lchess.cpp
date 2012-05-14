@@ -84,26 +84,34 @@ mv::Move
 Game_Tree_Search(Board brd, int depth)
 {
 	std::cout<< "Computer to make the Move !!\n";
-
+	std::vector< mv::Move > all_moves = get_next_moves(brd, PLAYER2);
+	std::cout << all_moves.size() << std::endl;
+	for(int i = 0; i < 10; i++)
+	{
+		std::cout << all_moves[i].type << "," << all_moves[i].angle << "," \
+				  << all_moves[i].src_x << "," << all_moves[i].src_y << "," \
+				  << all_moves[i].dst_x << "," << all_moves[i].dst_y << "," << std::endl;
+	}
 }
 
 int main(int argc, char *argv[])
 {
 	Board b;
-	int moveCount = 0;
+	int moveCount = 0, tmp;
 	b.init();
 	b.print();
 	while(1)
 	{
-		if(moveCount != 2)
+		if(moveCount != 1)
 		{	
 			mv::Move mv1 = input_move();
 			if(mv1.is_valid())
 			{
-				moveCount++;
 				std::cout<<"Move is valid\n";
-				b.make_move(mv1);
+				tmp = b.make_move(mv1);
 				b.print();
+				if(tmp != -1)
+					moveCount++;
 			}
 			else
 				std::cout<<"Move is invalid\n";
