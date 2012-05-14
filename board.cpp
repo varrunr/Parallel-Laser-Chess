@@ -98,33 +98,30 @@ Board::make_move(mv::Move m)
 	
 			src_clr = src_pc->get_color();
 			dst_clr = dst_pc->get_color();
+			
+			if( src_clr == dst_clr) {
+				//std::cout<<"Cannot make move\n";
+				return -1;
+			}
 
-			if(src_clr != dst_clr)
+			
+			int value = 0;
+			if(dst_pc->get_type() == Piece::Empty)
 			{
-				int value = 0;
-				if(dst_pc->get_type() == Piece::Empty)
-				{
-//					std::cout<<" Moving from "<<m.src_x<<","<<m.src_y<< \
-							   " to an empty place at "<<m.dst_x<<","<<m.dst_y<<"\n";
-					value = 0;
-				}
-				else{
-					value = get_value(dst_pc->get_type());
-				}
-				dst_pc->set_type( src_pc->get_type() );
-				dst_pc->set_color( src_pc->get_color() );
-				dst_pc->set_valid_moves( src_pc->get_valid_moves() );
-				dst_pc->set_angle( src_pc->get_angle());
-				src_pc->destroy();	
-				return value;
+				//std::cout<<" Moving from "<<m.src_x<<","<<m.src_y<< \
+						   " to an empty place at "<<m.dst_x<<","<<m.dst_y<<"\n";
+				value = 0;
 			}
 			else
 			{
-				if( src_clr == dst_clr) {
-//					std::cout<<"Cannot make move\n";
-				}
-				return -1;
+				value = get_value(dst_pc->get_type());
 			}
+			dst_pc->set_type( src_pc->get_type() );
+			dst_pc->set_color( src_pc->get_color() );
+			dst_pc->set_valid_moves( src_pc->get_valid_moves() );
+			dst_pc->set_angle( src_pc->get_angle());
+			src_pc->destroy();	
+			return value;
 			break;
 		}	
 		case 'R':

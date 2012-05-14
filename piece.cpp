@@ -13,6 +13,7 @@ Piece::destroy()
 	this->posn[0] = (-1); // x coord
 	this->posn[1] = (-1); // y coord
 	this->face_angle = -1;
+	this->color = 0;
 }
 
 int 
