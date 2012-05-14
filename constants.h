@@ -11,6 +11,7 @@
 #define BLK 1 
 #define TRMIRR 3.5
 #define BMSPLTR 5
+#define MIRR 4
 
 #define PLAYER1 1
 #define PLAYER2 2
