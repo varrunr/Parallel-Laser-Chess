@@ -153,6 +153,7 @@ Game_Tree_Search(Board &brd1, int depth, int origDepth, int player, int masterPl
 
 int n_ply_lookahead(Board brd, int player, int depth, std::vector<mv::Move> &v)
 {
+	int r, k=0, movescore1, movescore2;
 	if(depth == 0)
 	{
 		return 0;
@@ -160,29 +161,55 @@ int n_ply_lookahead(Board brd, int player, int depth, std::vector<mv::Move> &v)
 	else
 	{
 		int bestScore = -10000;
+		std::vector< mv::Move > all_moves2;
 		std::vector< mv::Move > all_moves = get_next_moves(brd, player);
+		std::cout << "All moves 1: " << all_moves.size() << std::endl;
 		for(int i = 0; i < all_moves.size(); i++)
 		{
 			Board copyBoard = brd;
-			int movescore1 = copyBoard.make_move(all_moves[i]);
-			std::vector< mv::Move > all_moves2 = get_next_moves(copyBoard, player);
+			if( (r = copyBoard.make_move(all_moves[i]) ) == -1 )
+			{
+				continue;
+			}
+			else
+			{
+				movescore1 = r;
+			}
+			all_moves2 = get_next_moves(copyBoard, player);
+			std::cout << "All moves 2: " << all_moves2.size() << std::endl;
 			for(int j = 0; j < all_moves2.size(); j++)
 			{
 				Board copyBoard2 = copyBoard;
-				int movescore2 = copyBoard2.make_move(all_moves2[j]);
+				movescore2 = 0;
 				movescore2 += movescore1;
 				int newPlayer = (player == PLAYER2) ? PLAYER1 : PLAYER2;
 				int score = movescore2 - n_ply_lookahead(copyBoard2, newPlayer, depth-1, v);
 				
+				if( (r = copyBoard2.make_move(all_moves2[j]) ) == -1 )
+				{
+					continue;
+				}
+				else
+				{
+					movescore2 = r;
+				}
+
 				if(score > bestScore)
 				{
+					k = 1;
 					bestScore = score;
 					v.clear();
 					v.push_back(all_moves[i]);
 					v.push_back(all_moves2[j]);
 				}
 			}
-		}
+	/*		if(k == 0)
+			{
+				v.clear();
+				v.push_back(all_moves[0]);
+				v.push_back(all_moves2[0]);	
+			}
+	*/	}
 		return bestScore;
 	}
 }
