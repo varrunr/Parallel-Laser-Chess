@@ -2,6 +2,7 @@
 #include<cstring>
 #include<cassert>
 #include<vector>
+#include<cmath>
 #include "move.h"
 #include "constants.h"
 
@@ -47,7 +48,11 @@ valid_loc(int x , int y)
 bool 
 Move::loc_is_valid()
 {
-	return ( valid_loc(this->src_x , this->src_y) && 
+	int a = std::abs(this->src_x - this->dst_x);
+	int b = std::abs(this->src_y - this->dst_y);
+
+	return ( ((a == 1 && b == 0) ||(a == 0 && b == 1)) &&
+			 valid_loc(this->src_x , this->src_y) && 
 			 valid_loc(this->dst_x , this->dst_y) );
 }
 
@@ -79,6 +84,7 @@ Move::Move()
 	this->src_x = 0;
 	this->src_y = 0;
 	this->angle = 0;
+	this->type = '-';
 }
 
 Move::Move(	char mv_type , int angle, 
