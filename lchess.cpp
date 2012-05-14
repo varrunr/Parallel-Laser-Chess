@@ -7,7 +7,7 @@
 #include "lchess.h"
 
 std::vector< mv::Move > 
-get_next_moves( Board & brd , Piece& pc , int player)
+get_next_moves( Board & brd, int player)
 {
 	std::vector< Piece* > player_pcs = brd.get_pieces(player);
 	Piece *cur_pc;
@@ -80,22 +80,39 @@ input_move()
 	return mv::Move(type , angle , s1 , s2 , d1 , d2);
 }
 
+mv::Move 
+Game_Tree_Search(Board brd, int depth)
+{
+	std::cout<< "Computer to make the Move !!\n";
+
+}
+
 int main(int argc, char *argv[])
 {
 	Board b;
+	int moveCount = 0;
 	b.init();
 	b.print();
 	while(1)
 	{
-		mv::Move mv1 = input_move();
-		if(mv1.is_valid())
-		{
-			std::cout<<"Move is valid\n";
-			b.make_move(mv1);
-			b.print();
+		if(moveCount != 2)
+		{	
+			mv::Move mv1 = input_move();
+			if(mv1.is_valid())
+			{
+				moveCount++;
+				std::cout<<"Move is valid\n";
+				b.make_move(mv1);
+				b.print();
+			}
+			else
+				std::cout<<"Move is invalid\n";
 		}
 		else
-			std::cout<<"Move is invalid\n";
+		{
+			moveCount = 0;
+			Game_Tree_Search(b, 1);
+		}
 	}
 	return 0;
 }

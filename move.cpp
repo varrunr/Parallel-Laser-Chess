@@ -92,4 +92,3 @@ Move::Move(	char mv_type , int angle,
 	this->dst_x = d_x;
 	this->dst_y = d_y;
 }
-
