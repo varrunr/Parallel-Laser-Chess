@@ -12,6 +12,7 @@ Piece::destroy()
 	this->type = Piece::Empty;
 	this->posn[0] = (-1); // x coord
 	this->posn[1] = (-1); // y coord
+	this->face_angle = -1;
 }
 
 int 
