@@ -42,7 +42,8 @@ Board::get_pieces(int player)
 			cur_pc = &(this->chessboard[i][j]);
 			if(cur_pc->get_color() == player)
 			{
-				pc_list.push_back(cur_pc);
+				if(cur_pc->get_type() != Piece::Hcube)
+					pc_list.push_back(cur_pc);
 			}
 		}
 	}
@@ -127,6 +128,7 @@ Board::make_move(mv::Move m)
 		case 'R':
 		{
 			src_pc = &(this->chessboard[m.src_x][m.src_y]);
+			if(!src_pc->canRotate()) return -1;
 			int new_angle = src_pc->get_angle();
 			if(new_angle == 0 && m.angle == -90)
 			{
@@ -136,13 +138,14 @@ Board::make_move(mv::Move m)
 			{
 				new_angle = ( new_angle + m.angle ) % 360;
 			}
-			src_pc->set_angle(new_angle);	
+			src_pc->set_angle(new_angle);
+			return 0;
 			break;
 		}
 		case 'F':
 		{
 			fire( *src_pc , *this , m.angle);
-			return 1;
+			return -1;
 			break;
 		}
 		default: return -1;

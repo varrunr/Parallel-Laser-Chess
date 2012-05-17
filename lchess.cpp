@@ -39,8 +39,9 @@ get_next_moves( Board & brd, int player)
 			if(m4.is_valid() && brd.locIsEmpty(x, y-1))
 				moves.push_back(m4);
 		}
-		if(cur_pc->canRotate())
+		if(cur_pc->canRotate() && cur_pc->get_type() != Piece::Laser)
 		{
+			/*
 			mv::Move m5('R', 90 , x , y , 0 , 0);
 			if(m5.is_valid())
 				moves.push_back(m5);
@@ -48,6 +49,7 @@ get_next_moves( Board & brd, int player)
 			mv::Move m6('R', -90 , x , y , 0 , 0);
 			if(m6.is_valid())
 				moves.push_back(m6);
+			*/
 		}
 /*		if(cur_pc->canFire())
 		{
@@ -75,7 +77,7 @@ input_move()
 			std::cin>>s1>>s2>>d1>>d2;
 			break;
 		case 'R':
-			std::cin>>angle>>s1>>s2;
+			std::cin>>s1>>s2>>angle;
 			break;
 		case 'F':
 			break;
@@ -85,9 +87,21 @@ input_move()
 
 void printMove(mv::Move m1)
 {
-	std::cout << m1.type << " " << m1.angle << " " \
-			  << m1.src_x << " " << m1.src_y << " " \
+	switch(m1.type)
+	{
+		case 'M':
+			std::cout<<"Moving from "
+			  << m1.src_x << " " << m1.src_y << " to " 
 			  << m1.dst_x << " " << m1.dst_y << std::endl;
+			break;
+		case 'R':
+			std::cout<<"Rotating piece at "
+					 << m1.src_x << " " << m1.src_y << " " << m1.angle 
+					 << " degree";
+			break;
+		default:
+			break;
+	}
 }
 
 /*int
@@ -220,34 +234,36 @@ int main(int argc, char *argv[])
 	int moveCount = 0, tmp , test;
 	b.init();
 	b.print();
+	
 
 	while(1)
 	{
-		if(moveCount != 1)
+		if(moveCount != 2)
 		{	
+			/* Input move from user */
+			std::cout<<"Users move "<<moveCount+1<<"\n";
 			mv::Move mv1 = input_move();
 			if(mv1.is_valid())
 			{
 				std::cout<<"Move is valid\n";
 				tmp = b.make_move(mv1);
-				b.print();
-				std::cout<<"Computers Turn now(ok?)\n";
-				std::cin>>test;
-
 				if(tmp != -1)
 					moveCount++;
+				b.print();
 			}
-			else
-				std::cout<<"Move is invalid\n";
+			else std::cout<<"Move is invalid\n";
 		}
 		else
 		{
+			std::cout<<"Computers Turn now(ok?)\n";
+			//std::cin>>test;
+
+			/* Computer makes a move */
 			moveCount = 0;
 			std::vector<mv::Move> v;
+
 			int lookahead = 2;
 			n_ply_lookahead(b, PLAYER2, lookahead, lookahead, v);
-			//std::cout<<"Lookahead done "<<v.size()<<"\n";
-			//b.print();
 			
 			if( v.size() == 2)
 			{
