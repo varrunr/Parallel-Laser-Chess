@@ -26,6 +26,25 @@ Move::operator = (const Move &src)
 	this->angle = src.angle;	
 	return *this;
 }
+
+void
+Move::print()
+{
+	switch(type)
+	{
+		case 'M':
+			std::cout<<"Move "<<this->src_x<<" "<<this->src_y<<" to "<<
+					this->dst_x<<this->dst_y<<std::endl;
+			break;
+		case 'R':
+			std::cout<<"Rotate "<<this->angle<<std::endl;
+			break;
+		case 'F':
+			std::cout<<"Fire laser"<<std::endl;
+			break;
+	}
+}
+	
 bool 
 Move::is_valid_type()
 {

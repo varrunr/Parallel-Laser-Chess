@@ -22,6 +22,7 @@ namespace mv
 			Move& operator = (const Move&);		
 			bool is_valid();
 			bool set_move(int *);
+			void print();
 	};
 }
 #endif
