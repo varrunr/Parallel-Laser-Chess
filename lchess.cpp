@@ -106,70 +106,6 @@ void printMove(mv::Move m1)
 	}
 }
 
-/*int
-Game_Tree_Search(Board &brd1, int depth, int origDepth, int player, int masterPlayer, int value)
-{
-	Board brd = brd1;
-	std::vector< mv::Move > all_moves = get_next_moves(brd, player);
-
-//	std::cout << all_moves.size() << std::endl;
-	int worth2 = -1, worth = -1;
-	mv::Move good_move1, good_move2;
-	int finalVal, currentValue;
-	good_move1 = all_moves[0];
-	
-	for(int i = 0; i < all_moves.size(); i++)
-	{
-		Board copyBoard = brd;
-		worth = copyBoard.make_move(all_moves[i]);
-	
-		std::vector< mv::Move > all_moves2 = get_next_moves(copyBoard, player);
-
-		for(int j = 0; j < all_moves2.size(); j++)
-		{
-			Board copyBoard2 = copyBoard;
-			worth2 = copyBoard2.make_move(all_moves2[j]);
-
-			if(player == masterPlayer)
-				value += worth + worth2;
-			else
-				value -= worth + worth2;
-
-
-			int newPlayer = (player == PLAYER2) ? PLAYER1 : PLAYER2 ;
-
-			if(depth != 0)
-			{
-				currentValue = Game_Tree_Search(copyBoard2, depth-1, depth, newPlayer, masterPlayer, value);				
-			}
-			else
-			{
-				return value;
-			}
-
-			if(depth == origDepth )
-			{
-				if(finalVal < currentValue)
-				{
-					good_move1 = all_moves[i];
-					good_move2 = all_moves2[j];
-					finalVal = currentValue;
-				}
-			}
-		}
-	}
-
-	if(depth == origDepth)
-	{
-		brd1.make_move(good_move1);
-		brd1.make_move(good_move2);
-		return 0;
-	}
-	else
-		return currentValue;
-}
-*/
-
 int n_ply_lookahead(Board brd, int player, int depth, int origDepth , std::vector<mv::Move> &best_mv)
 {
 	int r=0, k=0, move1score=0, move2score=0 , totalscore = 0;
@@ -233,15 +169,12 @@ int n_ply_lookahead(Board brd, int player, int depth, int origDepth , std::vecto
 
 void get_2_moves( Board brd , int player, std::vector< std::vector< mv::Move > >& final)
 {
-	//std::vector< std::vector< mv::Move > > final;
 	std::vector< mv::Move > all_moves1 = get_next_moves(brd, player);
-	//std::cout << "All moves 1: " << all_moves.size() << std::endl;
 	for(int i = 0; i < all_moves1.size(); i++)
 	{
 		Board copyBoard = brd;
 		copyBoard.make_move(all_moves1[i]);
 		std::vector< mv::Move > all_moves2 = get_next_moves(copyBoard, player);
-		//std::cout << "All moves 2: " << all_moves2.size() << std::endl;
 		std::vector< mv::Move > temp;
 		for(int j = 0; j < all_moves2.size(); j++)
 		{
@@ -250,7 +183,6 @@ void get_2_moves( Board brd , int player, std::vector< std::vector< mv::Move > >
 		}
 		final.push_back(temp);
 	}
-	//return final;
 }
 
 int alpha_beta(Board b , std::vector< mv::Move > m , int alpha, int beta, int player , int depth)
