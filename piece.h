@@ -27,7 +27,6 @@ class Piece
 
 		/* Setters and getters */
 
-		
 		void 	    set_angle(int);
 		void	    set_type(int);
 		void	    set_color(int);
@@ -42,6 +41,7 @@ class Piece
 		int 	    get_angle();
 		int			getX();
 		int 		getY();
+		
 		/* Function prototypes */
 		bool		canMove();
 		bool		canFire();

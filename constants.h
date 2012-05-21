@@ -7,11 +7,11 @@
 /* Constants for evaluation */
 #define INFTY 10000
 #define KING INFTY
-#define LASER 9
-#define BLK 1 
-#define TRMIRR 3.5
-#define BMSPLTR 5
-#define MIRR 4
+#define LASER 150
+#define BLK 90 
+#define TRMIRR 35
+#define BMSPLTR 50
+#define MIRR 40
 
 #define PLAYER1 1
 #define PLAYER2 2

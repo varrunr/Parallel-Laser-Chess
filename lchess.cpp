@@ -11,7 +11,7 @@ get_next_moves( Board & brd, int player)
 {
 	/* get pieces belonging to player */
 	std::vector< Piece* > player_pcs = brd.get_pieces(player);
-	
+	//std::cout<<"getting pieces\n";
 	Piece *cur_pc;
 	std::vector< mv::Move > moves;
 	
@@ -20,7 +20,7 @@ get_next_moves( Board & brd, int player)
 		cur_pc = player_pcs[i];
 		int x = cur_pc->getX();
 		int y = cur_pc->getY();
-
+		
 		if(cur_pc->canMove())
 		{
 			mv::Move m1('M', 0 , x, y, x + 1 , y);
@@ -38,10 +38,9 @@ get_next_moves( Board & brd, int player)
 			mv::Move m4('M', 0 , x, y, x, y - 1);
 			if(m4.is_valid() && brd.locIsEmpty(x, y-1))
 				moves.push_back(m4);
-		}
-		if(cur_pc->canRotate() && cur_pc->get_type() != Piece::Laser)
+		} 
+		if(cur_pc->canRotate()) //&& cur_pc->get_type() != Piece::Laser)
 		{
-			/*
 			mv::Move m5('R', 90 , x , y , 0 , 0);
 			if(m5.is_valid())
 				moves.push_back(m5);
@@ -49,15 +48,18 @@ get_next_moves( Board & brd, int player)
 			mv::Move m6('R', -90 , x , y , 0 , 0);
 			if(m6.is_valid())
 				moves.push_back(m6);
-			*/
 		}
-/*		if(cur_pc->canFire())
+		//std::cout<<"Piece "<<x<<" "<<y<<" : "<<moves.size()<<std::endl;
+		/*
+		if(cur_pc->canFire())
 		{
 			mv::Move m7('F', 0 , x , y , 0 , 0 );
 			if(m7.is_valid())
 				moves.push_back(m7);
-		}
-*/	}
+		}*/
+	}
+	
+	//std::cout<<"No of valid moves: "<<moves.size()<<std::endl;
 	return moves;
 	
 }
@@ -194,6 +196,7 @@ int n_ply_lookahead(Board brd, int player, int depth, int origDepth , std::vecto
 			}
 
 			std::vector< mv::Move > all_moves2 = get_next_moves(copyBoard, player);
+			return 0;
 			//std::cout << "All moves 2: " << all_moves2.size() << std::endl;
 			for(int j = 0; j < all_moves2.size(); j++)
 			{
@@ -228,14 +231,95 @@ int n_ply_lookahead(Board brd, int player, int depth, int origDepth , std::vecto
 	}	
 }
 
+void get_2_moves( Board brd , int player, std::vector< std::vector< mv::Move > >& final)
+{
+	//std::vector< std::vector< mv::Move > > final;
+	std::vector< mv::Move > all_moves1 = get_next_moves(brd, player);
+	//std::cout << "All moves 1: " << all_moves.size() << std::endl;
+	for(int i = 0; i < all_moves1.size(); i++)
+	{
+		Board copyBoard = brd;
+		copyBoard.make_move(all_moves1[i]);
+		std::vector< mv::Move > all_moves2 = get_next_moves(copyBoard, player);
+		//std::cout << "All moves 2: " << all_moves2.size() << std::endl;
+		std::vector< mv::Move > temp;
+		for(int j = 0; j < all_moves2.size(); j++)
+		{
+			temp.push_back(all_moves1[i]);
+			temp.push_back(all_moves2[j]);
+		}
+		final.push_back(temp);
+	}
+	//return final;
+}
+
+int alpha_beta(Board b , std::vector< mv::Move > m , int alpha, int beta, int player , int depth)
+{
+	b.make_move(m[0]);
+	b.make_move(m[1]);
+
+	if(depth==0)
+	{
+		// leaf node
+		return b.evaluate(player);
+	}
+
+	std::vector< std::vector< mv::Move > > children;
+	get_2_moves( b , player , children);
+
+	if(player == PLAYER2)
+	{
+		for(int i = 0; i < children.size() ; i++)
+		{
+			alpha = std::max(alpha , alpha_beta( b , children[i] , alpha , beta , PLAYER1 , depth - 1));
+			if(beta >= alpha)
+				break;
+		}
+		return alpha;
+	}
+	else
+	{
+	 	for(int i = 0; i < children.size() ; i++)
+		{
+			beta = std::min( beta , alpha_beta(b , children[i] , alpha , beta , PLAYER2 , depth - 1));
+			if(beta <= alpha)
+				break;
+		}
+		return beta;
+	}
+}
+
+void search_with_pruning(Board &brd , int player, std::vector< mv::Move > &best_move , int depth)
+{
+	std::vector< std::vector< mv::Move > > start_move;
+	get_2_moves( brd , player , start_move);
+	
+	int max_score = -INFTY;
+	
+	for(int i = 0; i< start_move.size() ; i++)
+	{
+		int score = alpha_beta(brd , start_move[i] , 1, INFTY, player , depth);
+		if(score > max_score)
+		{
+			max_score = score;
+			best_move.clear();
+			best_move.push_back(start_move[i][0]);
+			best_move.push_back(start_move[i][1]);
+		}
+	}
+		
+}
+
 int main(int argc, char *argv[])
 {
+	std::system("Color 1A")
+	std::cout<<"blah\n";
+	return 0;
 	Board b;
 	int moveCount = 0, tmp , test;
 	b.init();
 	b.print();
 	
-
 	while(1)
 	{
 		if(moveCount != 2)
@@ -262,9 +346,11 @@ int main(int argc, char *argv[])
 			moveCount = 0;
 			std::vector<mv::Move> v;
 
-			int lookahead = 2;
-			n_ply_lookahead(b, PLAYER2, lookahead, lookahead, v);
-			
+			//int lookahead = 2;
+			//n_ply_lookahead(b, PLAYER2, lookahead, lookahead, v);
+			int depth = 3;
+			search_with_pruning(b, PLAYER2, v , depth);
+
 			if( v.size() == 2)
 			{
 				printMove(v[0]);

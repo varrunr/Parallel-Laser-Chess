@@ -14,6 +14,7 @@ class Board
 	    void destroy( Piece );
 	    void init();
 	    void print();
+		int evaluate(int);
 		Board& operator = (const Board &src);
 		std::vector< Piece* > get_pieces(int player);	
 		bool locIsEmpty(int ,int);

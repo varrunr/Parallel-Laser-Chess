@@ -42,14 +42,76 @@ Board::get_pieces(int player)
 			cur_pc = &(this->chessboard[i][j]);
 			if(cur_pc->get_color() == player)
 			{
-				if(cur_pc->get_type() != Piece::Hcube)
+					//if(cur_pc->get_type() != Piece::Hcube)
 					pc_list.push_back(cur_pc);
 			}
 		}
 	}
 	return pc_list;
 }
-				
+
+int Board::evaluate(int player)
+{
+	int score;
+	int player1 = player;
+	int player2;
+
+	if(player==PLAYER1) player2 = PLAYER2; else player2 = PLAYER1;
+	
+	int n_king = 0 , n_laser = 0, n_dia = 0 , n_blk = 0 , 
+		n_strmirr = 0 , n_trimirr = 0 , n_diamirr = 0 , n_bsp;
+	
+	for(int i = 0;i < this->chessboard.size() ; i++)
+	{
+		for(int j = 0; j< this->chessboard[i].size();j++)
+		{
+			Piece *cur_pc = &(this->chessboard[i][j]);
+			if(cur_pc->get_type() == Piece::Empty) continue;
+			int clr = cur_pc->get_color();
+			switch(cur_pc->get_type())
+			{
+				case Piece::King:
+					if(clr == player1) n_king++;
+					if(clr == player2) n_king--;
+					break;
+				case Piece::Laser:
+					if(clr == player1) n_laser++;
+					if(clr == player2) n_laser--;
+					break;
+				case Piece::Bsplitter:
+					if(clr == player1) n_bsp++;
+					if(clr == player2) n_bsp--;
+					break;
+				case Piece::DiaMirror:
+					if(clr == player1) n_dia++;
+					if(clr == player2) n_dia--;
+					break;
+				case Piece::Block:
+					if(clr == player1) n_blk++;
+					if(clr == player2) n_blk--;
+					break;
+				case Piece::StrMirror:
+					if(clr == player1) n_strmirr++;
+					if(clr == player2) n_strmirr--;
+					break;
+				case Piece::TriMirror:
+					if(clr == player1) n_trimirr++;
+					if(clr == player2) n_trimirr--;
+					break;
+				default:
+					break;
+				}
+		}
+	}
+	score = n_king * KING +
+			n_laser * LASER +
+			n_blk * BLK +
+			n_trimirr * TRMIRR +
+			n_bsp * BMSPLTR + 
+			n_strmirr * MIRR;
+	return score;
+}
+
 void swap_pc(Piece *pc1 , Piece *pc2)
 {
 	Piece *tmp = pc1;
