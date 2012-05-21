@@ -1,6 +1,24 @@
+What is Laser Chess?
+--------------------
 Laser chess: http://www.laserchess.org/
+
 Our objective is to design and implement a parallel laser chess
 program.
 
-Compile with 
+How to use?
+-----------
+Compile with
+ 
 $  g++ -o lchess piece.cpp board.cpp lchess.cpp move.cpp
+
+Run as
+
+$ ./lchess
+
+Input Format
+-----------
+
+Move: 'M <src X coord 0-8> <src Y coord 0-8> <dst X> <dst Y>' e.g 'M 1 0 2 0'
+
+Rotate: 'R <src X> <src Y> <angle 90/-90 >' e.g. 'R 1 0 -90'
+

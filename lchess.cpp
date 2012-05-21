@@ -312,9 +312,6 @@ void search_with_pruning(Board &brd , int player, std::vector< mv::Move > &best_
 
 int main(int argc, char *argv[])
 {
-	std::system("Color 1A")
-	std::cout<<"blah\n";
-	return 0;
 	Board b;
 	int moveCount = 0, tmp , test;
 	b.init();
